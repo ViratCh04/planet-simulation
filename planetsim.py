@@ -8,6 +8,7 @@ WIDTH, HEIGHT = 1350, 700
 WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Planet Simulation")
 
+BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 YELLOW = (255, 255, 0)
 BLUE = (0, 0, 237)
@@ -36,6 +37,9 @@ class Planet:
 
         self.x_velocity = 0
         self.y_velocity = 0
+        # Add this with planets instead
+        # self.total_velocity = math.sqrt(self.x_velocity ** 2 + self.y_velocity ** 2)
+
 
     def draw(self, win):
         # The last expression in the given formulas makes it so that the planets are drawn in the middle of window
@@ -58,9 +62,15 @@ class Planet:
         
         pygame.draw.circle(win, self.color, (x, y), self.radius)
 
+        if self.sun:
+            text = FONT.render(f"Sun", 2, BLACK)
+            win.blit(text, (x - text.get_width() / 2, y - text.get_height() / 2 ))
+
         if not self.sun:
             distance_text = FONT.render(f"{round(self.distancetosun / 1000, 1)} km", 1, WHITE)
             win.blit(distance_text, (x - distance_text.get_width() / 2, y - distance_text.get_height() / 2 ))
+    
+
     def attraction(self, other):
         other_x, other_y = other.x, other.y
         distance_x = other_x - self.x
@@ -75,6 +85,7 @@ class Planet:
         force_x = math.cos(theta) * force
         force_y = math.sin(theta) * force
         return force_x, force_y
+
 
     def update_position(self, planets):
         total_forcex = total_forcey = 0
@@ -92,6 +103,7 @@ class Planet:
         self.x += self.x_velocity * self.TIMESTEP
         self.y += self.y_velocity * self.TIMESTEP
         self.orbit.append((self.x, self.y))
+
 
 
 def main():
