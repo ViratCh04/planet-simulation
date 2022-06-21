@@ -1,1 +1,1 @@
-A simulation of planets inside the asteroid belt orbiting the sun
+A simulation of planets inside the asteroid belt orbiting the Sun.
